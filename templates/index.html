@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superior Insight ✕ Syed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            /* Superior University Official Colors */
+            --sup-purple: #4a1fa8;
+            --sup-purple-dark: #311078;
+            --sup-gold: #f5b700;
+            
+            /* Professional Light Theme Colors */
+            --bg-page: #f4f6f9;
+            --bg-chat: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --bubble-ai: #f8f9fc;
+            --bubble-ai-border: #e0e7ff;
+            --radius: 12px;
+        }
+
+        html, body { 
+            height: 100%; 
+            background: var(--bg-page); 
+            color: var(--text-main); 
+            font-family: 'DM Sans', sans-serif; 
+            overflow: hidden; 
+        }
+
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            background-image: radial-gradient(var(--border-light) 1px, transparent 1px);
+            background-size: 24px 24px;
+            pointer-events: none; z-index: 0;
+        }
+
+        .app {
+            position: relative; z-index: 1;
+            height: 100vh;
+            display: flex; flex-direction: column;
+            max-width: 900px; margin: 0 auto; 
+            background: var(--bg-chat);
+            box-shadow: 0 0 40px rgba(0,0,0,0.03);
+            border-left: 1px solid var(--border-light);
+            border-right: 1px solid var(--border-light);
+        }
+
+        /* ── HEADER ── */
+        .header {
+            padding: 16px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: #ffffff;
+            border-bottom: 2px solid var(--sup-purple);
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .header-brand { display: flex; align-items: center; gap: 16px; }
+
+        .collab-logos {
+            display: flex; align-items: center; gap: 6px;
+            background: var(--bg-page);
+            padding: 6px 12px;
+            border-radius: 50px;
+            border: 1px solid var(--border-light);
+        }
+
+        .logo-wrap {
+            width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .sup-logo { width: 32px; height: 32px; object-fit: contain; }
+        
+        .sta-logo {
+            background: var(--sup-purple);
+            color: white;
+            font-weight: 700; font-size: 13px; /* Slightly larger font for name */
+            padding: 6px 14px; /* Increased padding for Syed */
+            border-radius: 20px;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 6px rgba(74,31,168,0.3);
+        }
+
+        .header-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px; font-weight: 700;
+            color: var(--sup-purple-dark);
+        }
+
+        .header-text h1 span { color: var(--sup-gold); }
+
+        .header-text p {
+            font-size: 12px; color: var(--text-muted);
+            font-weight: 500; letter-spacing: 0.05em;
+            text-transform: uppercase; margin-top: 2px;
+        }
+
+        .status-badge {
+            display: flex; align-items: center; gap: 6px;
+            background: #f0fdf4; border: 1px solid #bbf7d0;
+            padding: 6px 12px; border-radius: 20px;
+            font-size: 12px; color: #166534; font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #22c55e; 
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+        /* ── CHAT ── */
+        .chat-box {
+            flex: 1; overflow-y: auto; padding: 24px;
+            display: flex; flex-direction: column; gap: 20px;
+            scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent;
+        }
+
+        .chat-box::-webkit-scrollbar { width: 6px; }
+        .chat-box::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        .msg-row {
+            display: flex; gap: 12px;
+            animation: slide-up 0.3s ease;
+        }
+
+        @keyframes slide-up {
+            from { opacity:0; transform: translateY(10px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        .msg-row.user { flex-direction: row-reverse; }
+
+        .avatar {
+            width: 36px; height: 36px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; margin-top: 2px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .avatar.ai-av { background: white; border: 1px solid var(--border-light); overflow: hidden; }
+        .avatar.ai-av img { width: 28px; height: 28px; object-fit: contain; }
+
+        .avatar.user-av {
+            background: var(--sup-gold);
+            color: var(--sup-purple-dark);
+            font-weight: 700; font-size: 13px;
+        }
+
+        .bubble-wrap { display: flex; flex-direction: column; max-width: 75%; }
+        .msg-row.user .bubble-wrap { align-items: flex-end; }
+
+        /* ── FIX 2: Hidden labels above messages ── */
+        .sender-name { display: none; }
+
+        .bubble {
+            padding: 14px 18px; border-radius: 14px;
+            font-size: 15px; line-height: 1.6; word-break: break-word;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .bubble.ai {
+            background: var(--bubble-ai);
+            border: 1px solid var(--bubble-ai-border);
+            color: var(--text-main); 
+            border-top-left-radius: 4px;
+        }
+
+        .bubble.user {
+            background: var(--sup-purple);
+            color: #ffffff; 
+            border-top-right-radius: 4px;
+            border: 1px solid var(--sup-purple-dark);
+        }
+
+        .bubble.ai p { margin: 0 0 10px; }
+        .bubble.ai p:last-child { margin: 0; }
+        .bubble.ai ul, .bubble.ai ol { margin: 8px 0; padding-left: 24px; }
+        .bubble.ai li { margin-bottom: 4px; }
+        .bubble.ai strong { color: var(--sup-purple); font-weight: 700; }
+        .bubble.ai code { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 13px; color: #b91c1c; }
+
+        .source-tag {
+            margin-top: 12px; display: inline-flex; align-items: center; gap: 6px;
+            font-size: 11px; color: var(--text-muted);
+            background: #f1f5f9; border: 1px solid var(--border-light);
+            padding: 4px 10px; border-radius: 6px; font-weight: 500;
+        }
+
+        .typing-dots { display: flex; align-items: center; gap: 5px; padding: 14px 17px; }
+        .typing-dots span {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--sup-purple); animation: bounce 1.3s infinite;
+        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%,60%,100%{transform:translateY(0);}
+            30%{transform:translateY(-6px);background:var(--sup-gold);}
+        }
+
+        .day-divider {
+            display: flex; align-items: center; gap: 12px;
+            color: var(--text-muted); font-size: 11px; font-weight: 500;
+            text-transform: uppercase; margin: 10px 0;
+        }
+        .day-divider::before, .day-divider::after {
+            content:''; flex:1; height:1px; background: var(--border-light);
+        }
+
+        .suggestions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+        .chip {
+            background: #ffffff; border: 1px solid var(--border-light);
+            color: var(--sup-purple); padding: 8px 16px; border-radius: 20px;
+            font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .chip:hover {
+            background: var(--sup-purple); color: white;
+            border-color: var(--sup-purple); transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(74,31,168,0.15);
+        }
+
+        /* ── INPUT ── */
+        .input-area {
+            flex-shrink: 0; padding: 16px 24px 24px;
+            background: #ffffff;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .input-row {
+            display: flex; align-items: center; gap: 12px;
+            background: var(--bg-page);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 8px 8px 8px 20px;
+            transition: all 0.2s;
+        }
+
+        .input-row:focus-within {
+            border-color: var(--sup-purple);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(74,31,168,0.1);
+        }
+
+        .input-row input {
+            flex: 1; background: transparent; border: none; outline: none;
+            color: var(--text-main); font-family: 'DM Sans', sans-serif;
+            font-size: 15px; caret-color: var(--sup-purple);
+        }
+
+        .input-row input::placeholder { color: #94a3b8; }
+
+        .send-btn {
+            background: var(--sup-purple);
+            color: #ffffff; border: none;
+            padding: 12px 24px; border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700; font-size: 14px;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(74,31,168,0.2);
+        }
+
+        .send-btn:hover:not(:disabled) {
+            background: var(--sup-purple-dark);
+            transform: translateY(-1px);
+        }
+
+        .send-btn:disabled { background: #cbd5e1; color: #64748b; cursor: not-allowed; box-shadow: none; }
+
+        .input-hint {
+            margin-top: 12px; font-size: 12px;
+            color: var(--text-muted); text-align: center;
+        }
+        .input-hint span { color: var(--sup-purple); font-weight: 700; }
+
+        @media (max-width: 600px) {
+            .app { border: none; }
+            .header { padding: 12px 16px; }
+            .collab-logos { display: none; }
+            .bubble-wrap { max-width: 90%; }
+            .input-area { padding: 12px 16px 16px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+
+    <div class="header">
+        <div class="header-brand">
+            <div class="collab-logos">
+                <div class="logo-wrap">
+                    <img class="sup-logo" src="https://www.superior.edu.pk/wp-content/uploads/2021/03/superior-university-logo.png" alt="Superior" onerror="this.parentElement.innerHTML='<span style=\'font-family:serif;font-weight:700;color:#4a1fa8;font-size:20px\'>S</span>'">
+                </div>
+                <div class="sta-logo">Syed</div>
+            </div>
+            <div class="header-text">
+                <h1>Superior <span>Insight</span></h1>
+                <p>AI-Powered Academic Oracle</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                <span>System Online</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-box" id="chat-box">
+        <div class="day-divider">Official University System</div>
+
+        <div class="msg-row">
+            <div class="avatar ai-av">
+                <img src="https://www.superior.edu.pk/wp-content/uploads/2021/03/superior-university-logo.png" alt="SI" onerror="this.parentElement.innerHTML='<span style=\'font-family:serif;font-weight:700;color:#4a1fa8;font-size:20px\'>S</span>'">
+            </div>
+            <div class="bubble-wrap">
+                <div class="bubble ai">
+                    Assalam o Alaikum! I am <strong>Superior Insight</strong> — an AI-powered Academic Oracle.<br><br>
+                    I have full access to the University's latest handbooks and program data. Ask me anything about <strong>admissions</strong>, <strong>credit hours</strong>, <strong>campus policies</strong>, or <strong>course roadmaps</strong>.
+                </div>
+            </div>
+        </div>
+
+        <div class="suggestions" id="suggestions">
+            <div class="chip" onclick="fillSuggestion(this)">📋 Explain the semester freeze policy</div>
+            <div class="chip" onclick="fillSuggestion(this)">🎓 BS Artificial Intelligence overview</div>
+            <div class="chip" onclick="fillSuggestion(this)">📚 Total credit hours for DPT</div>
+            <div class="chip" onclick="fillSuggestion(this)">🪪 Lost student ID card process</div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <div class="input-row">
+            <input type="text" id="user-input" placeholder="Ask about programs, policies, or credit hours..." autocomplete="off">
+            <button class="send-btn" id="send-btn" onclick="sendMessage()">Ask Syed</button>
+        </div>
+        <p class="input-hint">Powered by RAG Architecture &nbsp;·&nbsp; Developed by <span>Syed</span></p>
+    </div>
+
+</div>
+
+<script>
+    document.getElementById("user-input").addEventListener("keydown", function(e) {
+        if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+
+    function fillSuggestion(el) {
+        document.getElementById("user-input").value = el.textContent.replace(/^[^\w]+/, '').trim();
+        const s = document.getElementById("suggestions");
+        if (s) s.remove();
+        document.getElementById("user-input").focus();
+    }
+
+    function sanitize(str) {
+        const d = document.createElement("div");
+        d.textContent = str;
+        return d.innerHTML;
+    }
+
+    function makeAvatar(role) {
+        const av = document.createElement("div");
+        if (role === "ai") {
+            av.className = "avatar ai-av";
+            const img = document.createElement("img");
+            // ── FIX 1c: Simple JS Fallback ──
+            img.src = "https://www.superior.edu.pk/wp-content/uploads/2021/03/superior-university-logo.png";
+            img.alt = "SI";
+            img.onerror = function() { 
+                av.innerHTML = '<span style=\'font-family:serif;font-weight:700;color:#4a1fa8;font-size:20px\'>S</span>'; 
+            };
+            av.appendChild(img);
+        } else {
+            av.className = "avatar user-av";
+            // ── FIX 5b: Changed STA to Syed ──
+            av.textContent = "Syed";
+        }
+        return av;
+    }
+
+    function appendMessage(role, htmlContent, sources) {
+        const chatBox = document.getElementById("chat-box");
+        const row = document.createElement("div");
+        row.className = `msg-row${role === "user" ? " user" : ""}`;
+
+        const wrap = document.createElement("div");
+        wrap.className = "bubble-wrap";
+
+        // ── FIX 2c: Removed Sender Name creation completely ──
+        
+        const bubble = document.createElement("div");
+        bubble.className = `bubble ${role === "user" ? "user" : "ai"}`;
+        bubble.innerHTML = htmlContent;
+
+        if (sources && sources.length > 0) {
+            const src = document.createElement("div");
+            src.className = "source-tag";
+            src.textContent = "📄 " + sources[0];
+            bubble.appendChild(src);
+        }
+
+        wrap.appendChild(bubble); // Just append the bubble, no name label
+        row.appendChild(makeAvatar(role));
+        row.appendChild(wrap);
+        chatBox.appendChild(row);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function showTyping() {
+        const chatBox = document.getElementById("chat-box");
+        const row = document.createElement("div");
+        row.className = "msg-row"; row.id = "typing-row";
+        const wrap = document.createElement("div");
+        wrap.className = "bubble-wrap";
+
+        // ── FIX 2d: Removed Sender Name from typing indicator ──
+
+        const bubble = document.createElement("div");
+        bubble.className = "bubble ai";
+        bubble.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
+        
+        wrap.appendChild(bubble); // Just append bubble, no name label
+        row.appendChild(makeAvatar("ai")); row.appendChild(wrap);
+        chatBox.appendChild(row);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function removeTyping() {
+        const t = document.getElementById("typing-row");
+        if (t) t.remove();
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById("user-input");
+        const btn = document.getElementById("send-btn");
+        const message = input.value.trim();
+        if (!message) return;
+
+        const sugg = document.getElementById("suggestions");
+        if (sugg) sugg.remove();
+
+        appendMessage("user", sanitize(message));
+        input.value = "";
+        btn.disabled = true;
+        btn.textContent = "Thinking...";
+        showTyping();
+
+        try {
+            const res = await fetch("/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message })
+            });
+            const data = await res.json();
+            removeTyping();
+            appendMessage("ai", marked.parse(data.answer || "I could not find an answer."), data.sources);
+        } catch {
+            removeTyping();
+            appendMessage("ai", "⚠️ Connection error. Please check the server.");
+        }
+
+        btn.disabled = false;
+        // ── FIX 4b: Set button back to Ask Syed ──
+        btn.textContent = "Ask Syed";
+        input.focus();
+    }
+</script>
+</body>
+</html>

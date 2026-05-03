@@ -1,0 +1,6 @@
+Insight/
+.env
+__pycache__/
+*.pyc
+.vscode/
+faiss_index/
