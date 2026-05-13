@@ -3,4 +3,3 @@ Insight/
 __pycache__/
 *.pyc
 .vscode/
-faiss_index/
